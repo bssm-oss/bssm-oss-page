@@ -48,14 +48,14 @@ export function AppShell({ activeMode, children }: AppShellProps) {
         </nav>
 
         <div className="app-shell__actions">
-          <span className="chip">frontend-only prototype</span>
+          <span className="chip">react live canvas</span>
           <a
             className="external-link"
             href={orgSnapshot.href}
             target="_blank"
             rel="noreferrer"
           >
-            Open GitHub
+            Open GitHub org
           </a>
         </div>
       </header>

@@ -12,41 +12,54 @@ function renderRoute(route: string) {
   )
 }
 
-describe('bssm-oss landing app', () => {
-  it('renders the home route with org intro content', () => {
+describe('bssm-oss live editor', () => {
+  it('renders the shared landing canvas on the home route', () => {
     renderRoute('/')
 
     expect(
-      screen.getByRole('heading', { name: '오픈소스 실험이 쌓이는 조직, bssm-oss' }),
+      screen.getByRole('heading', {
+        name: '하나의 랜딩을 클릭하고, 오른쪽에서 코드나 AI로 바로 바꾸는 캔버스',
+      }),
     ).toBeInTheDocument()
-    expect(screen.getByText('가장 먼저 훑어볼 만한 프로젝트')).toBeInTheDocument()
-    expect(screen.getAllByText('CodeAgora')).toHaveLength(2)
+    expect(
+      screen.getByRole('heading', {
+        name: '오픈소스 실험이 쌓이는 조직, bssm-oss',
+      }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'AI Mode' })).toBeInTheDocument()
   })
 
-  it('navigates to AI mode from the header toggle', async () => {
+  it('switches modes while keeping the same canvas mounted', async () => {
     const user = userEvent.setup()
-    renderRoute('/')
+    renderRoute('/code')
+
+    expect(screen.getByRole('heading', { name: 'Code Mode' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', {
+        name: '오픈소스 실험이 쌓이는 조직, bssm-oss',
+      }),
+    ).toBeInTheDocument()
 
     const toggle = screen.getByRole('navigation', { name: 'Mode switch' })
     await user.click(within(toggle).getByRole('link', { name: 'AI Mode' }))
 
-    expect(screen.getByRole('heading', { name: '말로 바꾸는 작업공간' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'AI Mode' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', {
+        name: '오픈소스 실험이 쌓이는 조직, bssm-oss',
+      }),
+    ).toBeInTheDocument()
   })
 
-  it('returns home when the brand is clicked from code mode', async () => {
+  it('opens the selected node source in code mode', async () => {
     const user = userEvent.setup()
     renderRoute('/code')
 
-    expect(
-      screen.getByRole('heading', { name: '코드를 바로 보고 수정하는 작업공간' }),
-    ).toBeInTheDocument()
-
     await user.click(
-      screen.getByRole('link', { name: 'bssm-oss experimental open source lab' }),
+      screen.getByRole('button', { name: 'Featured / CodeAgora editable block' }),
     )
 
-    expect(
-      screen.getByRole('heading', { name: '오픈소스 실험이 쌓이는 조직, bssm-oss' }),
-    ).toBeInTheDocument()
+    expect(screen.getAllByText('Featured / CodeAgora').length).toBeGreaterThan(0)
+    expect(screen.getByDisplayValue('<RepoCard repo={repo} />')).toBeInTheDocument()
   })
 })
