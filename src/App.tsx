@@ -1,8 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppShell } from './components/AppShell'
-import { AiModePage } from './routes/AiModePage'
-import { CodeModePage } from './routes/CodeModePage'
-import { HomePage } from './routes/HomePage'
+import { getStoredMode } from './lib/editorAccess'
+import { EditorWorkspacePage } from './routes/EditorWorkspacePage'
 
 export function AppRoutes() {
   return (
@@ -10,8 +9,8 @@ export function AppRoutes() {
       <Route
         path="/"
         element={
-          <AppShell>
-            <HomePage />
+          <AppShell activeMode={getStoredMode('ai')}>
+            <EditorWorkspacePage />
           </AppShell>
         }
       />
@@ -19,7 +18,7 @@ export function AppRoutes() {
         path="/ai"
         element={
           <AppShell activeMode="ai">
-            <AiModePage />
+            <EditorWorkspacePage initialMode="ai" />
           </AppShell>
         }
       />
@@ -27,7 +26,7 @@ export function AppRoutes() {
         path="/code"
         element={
           <AppShell activeMode="code">
-            <CodeModePage />
+            <EditorWorkspacePage initialMode="code" />
           </AppShell>
         }
       />
