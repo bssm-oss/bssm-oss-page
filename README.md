@@ -1,25 +1,27 @@
 # bssm-oss opensource page
 
-`bssm-oss` GitHub organization을 소개하는 프론트엔드 랜딩과 `AI Mode` / `Code Mode` 셸 페이지 저장소다.
+`bssm-oss` GitHub organization 소개 랜딩을 실시간 편집 캔버스로 바꾼 React 앱 저장소다.
 
-현재는 백엔드 없이 동작하는 정적 프론트엔드 v1이며, 조직 소개와 미래 편집 경험의 방향을 먼저 보여주는 단계다.
+지금 버전은 같은 랜딩 캔버스를 두고, 상단 토글로 `AI Mode`와 `Code Mode`를 오가며 선택한 섹션/카드를 오른쪽 인스펙터에서 직접 수정하는 구조다.
 
 ## What this project includes
 
-- `bssm-oss` organization 소개 랜딩
-- 공개 저장소 스냅샷 기반 대표 프로젝트 섹션
-- `AI Mode` 셸 페이지
-- `Code Mode` 셸 페이지
-- 실험적 OSS 랩 톤의 디자인 시스템 초안
+- `bssm-oss` 소개 랜딩을 그대로 쓰는 live editor canvas
+- 섹션 + 카드 단위 editable node registry
+- 오른쪽 `AI Mode` 스레드 패널
+- 오른쪽 `Code Mode` 런타임 JSX 편집기
+- 핀 + 스레드 형태의 Figma-like comment UX
+- Firebase Firestore 기반 실시간 상태 동기화
+- 실험적 OSS 편집 툴 톤의 디자인 시스템
 
 ## Current routes
 
 - `/`
-  organization 소개 랜딩
+  같은 캔버스, 마지막 사용 모드 또는 기본 `AI`
 - `/ai`
-  자연어 수정 흐름을 설명하는 AI Mode 셸
+  같은 캔버스, AI inspector 기본 오픈
 - `/code`
-  코드 직접 수정 흐름을 설명하는 Code Mode 셸
+  같은 캔버스, Code inspector 기본 오픈
 
 ## Stack
 
@@ -27,6 +29,9 @@
 - Vite
 - TypeScript
 - React Router
+- Firebase Firestore
+- Monaco Editor
+- Babel Standalone
 - Vitest + Testing Library
 
 ## Quick start
@@ -37,6 +42,22 @@ pnpm dev
 ```
 
 브라우저에서 Vite 개발 서버 주소를 열면 된다.
+
+## Environment
+
+실시간 공유와 편집 잠금은 아래 환경 변수를 사용한다.
+
+```bash
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_APP_ID=
+VITE_EDITOR_PASSPHRASE_SHA256=
+```
+
+환경 변수가 없으면 앱은 `demo / local` 모드로 동작하고, `localStorage` 기반 로컬 동기화만 사용한다.
+
+AI 키는 환경 변수로 두지 않고 각 사용자 브라우저에서 직접 입력해 `localStorage`에 저장한다.
 
 ## Validation
 
@@ -96,10 +117,9 @@ pnpm lint
 
 현재 구현 범위 밖의 항목:
 
-- 백엔드
-- 실시간 GitHub 동기화
-- 실제 AI agent 실행
-- 코드 편집기와 파일 직접 반영
-- PR 없이 수정하는 런타임
+- 강한 서버 측 권한 검증
+- 실제 리포지토리 파일 직접 수정
+- 멀티파일 코드 생성
+- 배포용 Firebase security rules 자동 구성
 
-즉, 지금은 “소개 랜딩 + 편집 모드 셸” 단계이고, 직접 수정 경험은 다음 단계 과제다.
+즉, 지금은 “같은 랜딩을 클릭해서 JSX/AI로 바로 바꾸는 live canvas” 단계이고, 편집 권한은 의도적으로 soft gate 수준으로만 막아 둔 상태다.
